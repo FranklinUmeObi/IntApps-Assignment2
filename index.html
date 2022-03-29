@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="" style="background: linear-gradient(to right, #ffc595, #ffd8bf);">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NotFlix</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+  </head>
+
+
+
+  <body>
+    <div  id="app"  style="display: flex; align-items: center; flex-direction: column;font-family: 'Varela Round', sans-serif;">
+      <h1 class="title">Welcome to NotFlix</h1>
+      <div class="baseButtons" style="display: flex; align-items: center; margin: 10px">
+        <button v-on:click="createTable" style="margin: 4px;">Create</button>
+        <button v-on:click="deleteTable" style="margin: 4px;">Destroy</button>
+      </div>
+    
+     <button v-on:click="queryTable" style="margin: 10px;">Query</button>
+     <div class="baseButtons" style="display: flex; align-items: center; margin: 5px;margin-bottom:80px;">
+        <div class="input" style="display: flex; align-items: center; flex-direction: column;">
+          <p class="label">Name</p>
+          <input v-model="movieName"  style=" margin: 3px"/>
+        </div>
+        <div class="input" style="display: flex; align-items: center; flex-direction: column;">
+          <p class="label">Year</p>
+          <input v-model="movieYear"  style=" margin: 3px"/>
+        </div>
+        <div class="input" style="display: flex; align-items: center; flex-direction: column;">
+          <p class="label">Rating</p>
+          <input v-model="movieRating"  style=" margin: 3px"/>
+        </div>
+      </div>
+
+      <div class="movies" style="display:flex; justify-content:space-around; flex-wrap: wrap; width: 100%;">
+        <div v-for="movie in data" v-bind:key="movie.title" >
+          <div class="movieCard" style="margin:20px; padding:5px; height:330px; width:230px; outline:solid 1px black;background:white;">
+            <h3>{{movie.title}}</h3>
+            <p style="overflow-y:scroll;height:140px">{{movie.plot}}</p>
+            <p><b>Released:</b> {{movie.year}}</p>
+            <p><b>Rated:</b> {{movie.rating}}/10</p>
+            <p><b>Ranked:</b> {{movie.rank}}th this week</p>
+            
+          </div>
+          
+        </div>
+        
+
+      </div>
+    </div>
+  </body>
+
+  <script>
+    let app = new Vue({
+      el: "#app",
+      data: {
+        movieName: "The",
+        movieYear: "2012",
+        movieRating: "6",
+        data: []
+      },
+      methods: {
+        createTable: createTable,
+        deleteTable: deleteTable,
+        queryTable: queryTable,
+      },
+    });
+
+    function createTable() {
+      let prom = fetch("createTable")
+    }
+    
+    function deleteTable() {
+      let prom = fetch("deleteTable")
+    }
+
+    function queryTable() {
+      let url = "queryTable/" + this.movieName + "/"+ this.movieYear + "/"+ this.movieRating
+      let prom = fetch(url)
+      prom.then((response) => response.json())
+        .then((response) => {
+         console.log(response);
+         this.data = response
+        });
+    }
+
+    
+  </script>
+</html>
